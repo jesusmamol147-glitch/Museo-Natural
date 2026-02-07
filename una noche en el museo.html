@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronos Heritage | Museo de Historia Universal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --museum-gold: #c5a059;
+            --museum-dark: #121212;
+            --museum-cream: #f4f1ea;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--museum-cream);
+            color: var(--museum-dark);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .bg-museum-dark { background-color: var(--museum-dark); }
+        .text-museum-gold { color: var(--museum-gold); }
+        .border-museum-gold { border-color: var(--museum-gold); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #121212; }
+        ::-webkit-scrollbar-thumb { background: var(--museum-gold); }
+
+        .hero-gradient {
+            background: linear-gradient(rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)), 
+                        url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2000&auto=format&fit=crop') no-repeat center/cover;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--museum-gold);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .image-card {
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background-color: #e5e7eb; /* Color de fondo mientras carga */
+        }
+        .image-card img {
+            transition: transform 0.8s ease;
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(197, 160, 89, 0.1);
+            border-left-color: var(--museum-gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegación Superior -->
+    <nav class="bg-museum-dark text-white sticky top-0 z-50 border-b border-museum-gold/30">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <svg width="40" height="40" viewBox="0 0 100 100" class="fill-current text-museum-gold">
+                    <rect x="20" y="20" width="60" height="60" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M50 10 L50 90 M10 50 L90 50" stroke="currentColor" stroke-width="1"/>
+                    <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                </svg>
+                <div>
+                    <span class="block text-xl font-bold tracking-widest leading-none serif">CHRONOS</span>
+                    <span class="block text-[10px] tracking-[0.3em] text-museum-gold font-semibold">HERITAGE MUSEUM</span>
+                </div>
+            </div>
+
+            <!-- Menú Principal -->
+            <ul class="hidden md:flex gap-8 text-xs font-semibold tracking-widest uppercase">
+                <li><a href="#exhibiciones" class="nav-link">Exhibiciones</a></li>
+                <li class="group relative">
+                    <a href="#" class="nav-link">Periodos</a>
+                    <ul class="absolute top-full left-0 mt-4 bg-museum-dark border border-museum-gold/20 p-4 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                        <li class="py-2"><a href="#" class="hover:text-museum-gold transition">Edad Antigua</a></li>
+                        <li class="py-2"><a href="#" class="hover:text-museum-gold transition">Edad Media</a></li>
+                        <li class="py-2"><a href="#" class="hover:text-museum-gold transition">Renacimiento</a></li>
+                        <li class="py-2"><a href="#" class="hover:text-museum-gold transition">Contemporánea</a></li>
+                    </ul>
+                </li>
+                <li><a href="#investigacion" class="nav-link">Investigación</a></li>
+                <li><a href="#visita" class="nav-link">Visita Virtual</a></li>
+            </ul>
+
+            <button onclick="generateHeroImage()" class="bg-museum-gold hover:bg-yellow-600 text-black px-5 py-2 text-xs font-bold transition-all uppercase tracking-tighter rounded-sm">
+                Generar Reliquia
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="hero-section" class="hero-gradient h-[85vh] flex items-center justify-center text-center text-white px-6">
+        <div class="max-w-4xl">
+            <h2 class="text-museum-gold uppercase tracking-[0.5em] text-sm mb-4 font-semibold italic">Preservando el legado de la humanidad</h2>
+            <h1 class="text-5xl md:text-8xl mb-8 leading-tight">La Historia es el Espejo del Mañana</h1>
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <a href="#explorar" class="border-2 border-white/30 hover:border-museum-gold hover:text-museum-gold px-10 py-4 transition-all uppercase text-xs font-bold tracking-widest backdrop-blur-sm">Explorar Archivos</a>
+                <span class="text-white/40 hidden md:inline">|</span>
+                <p class="text-white/70 text-sm max-w-xs italic">Más de 5,000 años de crónicas, artefactos y epopeyas documentadas para la posteridad.</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de Exhibiciones -->
+    <main id="explorar" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black/10 pb-8">
+            <div class="max-w-2xl">
+                <h3 class="text-4xl mb-4">Galerías Destacadas</h3>
+                <p class="text-gray-600 leading-relaxed">Nuestra colección permanente abarca desde las primeras tablillas de arcilla sumerias hasta los documentos que forjaron la modernidad.</p>
+            </div>
+            <a href="#" class="text-museum-gold font-bold uppercase text-xs tracking-widest mt-6 md:mt-0 flex items-center gap-2 group">
+                Ver catálogo completo 
+                <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Card 1: Antigua Grecia -->
+            <div class="image-card group cursor-pointer" onclick="generateSpecificImage('un busto de mármol de Zeus o un filósofo griego, fondo de museo oscuro')">
+                <div class="relative aspect-[3/4] mb-6">
+                    <img id="img-grecia" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop" alt="Grecia" class="w-full h-full" onerror="this.src='https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=800'">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
+                </div>
+                <h4 class="text-2xl mb-2">Cuna de la Democracia</h4>
+                <p class="text-xs text-museum-gold font-bold uppercase tracking-widest mb-3">Grecia Clásica</p>
+                <p class="text-sm text-gray-500 leading-relaxed">Artes y pensamientos que definieron occidente.</p>
+            </div>
+
+            <!-- Card 2: Edad Media -->
+            <div class="image-card group cursor-pointer" onclick="generateSpecificImage('una catedral gótica majestuosa vista desde abajo, estilo oscuro medieval')">
+                <div class="relative aspect-[3/4] mb-6">
+                    <img id="img-medieval" src="https://images.unsplash.com/photo-1511221430067-160166699317?q=80&w=800&auto=format&fit=crop" alt="Edad Media" class="w-full h-full" onerror="this.src='https://images.unsplash.com/photo-1533154683836-84ea7a0bc310?q=80&w=800'">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
+                </div>
+                <h4 class="text-2xl mb-2">Sombras y Luces</h4>
+                <p class="text-xs text-museum-gold font-bold uppercase tracking-widest mb-3">Edad Media</p>
+                <p class="text-sm text-gray-500 leading-relaxed">El florecimiento de la arquitectura gótica y la fe.</p>
+            </div>
+
+            <!-- Card 3: Renacimiento -->
+            <div class="image-card group cursor-pointer" onclick="generateSpecificImage('un telescopio antiguo de latón sobre una mesa de madera con bocetos de Da Vinci')">
+                <div class="relative aspect-[3/4] mb-6">
+                    <img id="img-rena" src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?q=80&w=800&auto=format&fit=crop" alt="Renacimiento" class="w-full h-full" onerror="this.src='https://images.unsplash.com/photo-1579541814924-49fef17c5be5?q=80&w=800'">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
+                </div>
+                <h4 class="text-2xl mb-2">El Renacer del Hombre</h4>
+                <p class="text-xs text-museum-gold font-bold uppercase tracking-widest mb-3">Renacimiento</p>
+                <p class="text-sm text-gray-500 leading-relaxed">El redescubrimiento de los límites de lo humano.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Banner Interactivo -->
+    <section class="bg-museum-dark text-white py-20 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="w-full md:w-1/2">
+                <h3 class="text-5xl mb-6 text-museum-gold serif">Visualización Histórica</h3>
+                <p class="text-white/60 mb-8 text-lg">Reconstruimos artefactos perdidos. Escribe qué quieres ver.</p>
+                <div class="space-y-4">
+                    <input type="text" id="prompt-input" placeholder="Ej: 'Casco de samurái dorado'..." class="w-full bg-white/5 border border-white/20 p-4 text-white outline-none focus:border-museum-gold">
+                    <button onclick="handleUserGeneration()" class="w-full bg-museum-gold text-black font-bold py-4 uppercase tracking-widest hover:bg-yellow-600">Generar Artefacto</button>
+                </div>
+            </div>
+            
+            <div class="w-full md:w-1/2 relative min-h-[400px] border border-museum-gold/20 flex items-center justify-center bg-black/20">
+                <div id="loading-indicator" class="hidden flex-col items-center z-10">
+                    <div class="loading-spinner mb-4"></div>
+                </div>
+                <img id="generated-image" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800" class="max-h-[500px] shadow-2xl transition duration-1000">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-museum-dark text-white/50 py-16 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div>
+                <div class="flex items-center gap-3 mb-6 text-white">
+                    <svg width="30" height="30" viewBox="0 0 100 100" class="fill-current text-museum-gold">
+                        <rect x="20" y="20" width="60" height="60" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                    </svg>
+                    <span class="text-lg font-bold tracking-widest serif uppercase">CHRONOS</span>
+                </div>
+                <p class="text-sm italic">&copy; 2024 Chronos Heritage Museum.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const apiKey = ""; 
+
+        async function generateImage(prompt, elementId = 'generated-image') {
+            const loader = document.getElementById('loading-indicator');
+            const imgDisplay = document.getElementById(elementId);
+            
+            if (loader) loader.classList.remove('hidden');
+            if (imgDisplay) imgDisplay.style.opacity = '0.3';
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        instances: { prompt: prompt },
+                        parameters: { sampleCount: 1 }
+                    })
+                });
+
+                if (!response.ok) throw new Error('API Error');
+                
+                const result = await response.json();
+                const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                
+                imgDisplay.src = imageUrl;
+                imgDisplay.style.opacity = '1';
+            } catch (error) {
+                console.error("Error:", error);
+                imgDisplay.src = `https://source.unsplash.com/featured/?history,artifact,${Math.random()}`;
+                imgDisplay.style.opacity = '1';
+            } finally {
+                if (loader) loader.classList.add('hidden');
+            }
+        }
+
+        function generateHeroImage() {
+            generateImage("cinematic interior of a grand neoclassical history museum gallery, dramatic natural lighting");
+        }
+
+        function handleUserGeneration() {
+            const input = document.getElementById('prompt-input');
+            if (input.value.trim()) {
+                generateImage(input.value + ", cinematic museum lighting, dark atmosphere, highly detailed");
+            }
+        }
+
+        function generateSpecificImage(prompt) {
+            document.getElementById('generated-image').scrollIntoView({ behavior: 'smooth' });
+            generateImage(prompt);
+        }
+    </script>
+</body>
+</html>
